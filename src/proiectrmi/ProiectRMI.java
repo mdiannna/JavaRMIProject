@@ -14,8 +14,9 @@ public class ProiectRMI {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws Exception {
+        System.setProperty("java.rmi.server.hostname","127.0.0.1");
+        new ServerRMI();
     }
     
 }
