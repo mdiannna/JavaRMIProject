@@ -82,9 +82,13 @@ class ServerOp implements GeneralInterface {
 public class ServerRMI
 {
     static final int PORT = 1100;
-//    Client id, reservation array list
-    HashMap<Integer, ArrayList<Reservation>> reservations = new HashMap<Integer, ArrayList<Reservation>>();
+//    Client id, reservation Id array list
+//    static HashMap<Integer,ArrayList<Integer>> reservations = new HashMap<Integer, ArrayList<Integer>>();
     static int clientsIDs = 0;
+//    ReservationID, ClientID
+//        static HashMap<Integer,Integer> reservations = new HashMap<Integer, Integer>();
+        static HashMap<Integer,ArrayList<Integer>> reservations = new HashMap<Integer, ArrayList<Integer>>();
+
     
     /**
      * @param args the command line arguments
@@ -97,6 +101,7 @@ public class ServerRMI
             ServerSocket serverSocket = new ServerSocket(PORT);
             Socket clientSocket = serverSocket.accept();
             int clientID = clientsIDs++;
+             ArrayList<Reservation> reservClient = new ArrayList<Reservation>();
             
             DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
             OutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
@@ -140,6 +145,9 @@ public class ServerRMI
                                         
                     int reservationID = serverOb.reservation(tryReserve);
                     outputStream.write(reservationID);
+                    if(reservationID != -1) {
+                        reservations.put(reservationID, tryReserve);
+                    }
                 }
                 else if (method.equals("terminate"))
                 {
