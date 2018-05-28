@@ -21,6 +21,11 @@ public class Places {
         list = new int[maxLength];
         Arrays.fill(list, 0);
     }
+    
+    public Places(int nrPlaces) {
+        list = new int[nrPlaces];
+        Arrays.fill(list, 0);
+    }
 
     public int getMaxLength() {
         return maxLength;
@@ -109,19 +114,21 @@ public class Places {
 
         Places.Iterator it1 = p.createIterator();
 
-        System.out.println(it1.first());
-        System.out.println(it1.isDone());
+//        System.out.println(it1.first());
+//        System.out.println(it1.isDone());
 
-//                           System.out.println(it1.next());
         for (it1.first(); !it1.isDone(); it1.next()) {
             System.out.println(it1.currentPlace() + " :  " + it1.currentReservation());
         }
 
+        
+//        TODO: metoda getFreePlaces in ServerOp si ClientOp
         System.out.println("Free places:");
         for (it1.first(); !it1.isDone(); it1.nextFree()) {
             System.out.println(it1.currentPlace() + " :  " + it1.currentReservation());
         }
 
+        
         System.out.println("sdfgsdfG");
     }
 }

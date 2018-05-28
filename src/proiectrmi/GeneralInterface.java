@@ -7,6 +7,7 @@ package proiectrmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,6 +17,7 @@ interface GeneralInterface extends Remote {
     public void pune(int i) throws RemoteException;
     public int curent() throws RemoteException;
     public void terminate() throws RemoteException;
+    public ArrayList<Integer> locuriLibere() throws RemoteException;
 }
 
 

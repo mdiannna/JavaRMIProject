@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.*;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -19,7 +20,7 @@ import java.util.Scanner;
 class ClientOp implements GeneralInterface {
     Socket m_socket;
     DataOutputStream m_output;
-    InputStream m_input;
+    DataInputStream m_input;
     
     static final int PORT = 1100;
     static final String IP = "localhost";
@@ -28,7 +29,7 @@ class ClientOp implements GeneralInterface {
     {
         m_socket = new Socket(IP, PORT);
         m_output= new DataOutputStream(m_socket.getOutputStream());
-        m_input = m_socket.getInputStream();
+        m_input = new DataInputStream(m_socket.getInputStream());
     }
     
     public void pune(int i) throws RemoteException {
@@ -55,6 +56,36 @@ class ClientOp implements GeneralInterface {
         }
     };
     
+    @Override
+    public ArrayList<Integer> locuriLibere() throws RemoteException {
+        ArrayList<Integer> libere = null;
+        try  {
+            m_output.writeUTF("libere");
+        }  catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        
+        try {
+            
+            int size = m_input.read();
+            System.out.println("Size:" + size);
+
+            System.out.println("Size:" + size);
+            libere = new ArrayList<Integer>();    
+            for (int i = 0; i < size; i++) {
+                int nr = m_input.read();
+                libere.add(nr);
+                System.out.println("Nr: " + nr);
+            }
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+
+        }
+        return libere;
+    }
+    
     public void terminate() throws RemoteException
     {
         try{
@@ -71,6 +102,7 @@ class ClientOp implements GeneralInterface {
 
 public class ClientRMI
 {
+    ArrayList<Reservation> reservations = new ArrayList<Reservation>();
 
     /**
      * @param args the command line arguments
@@ -78,7 +110,6 @@ public class ClientRMI
     public static void main(String[] args) 
     {
 
-    
         try{
             System.out.println("Clientul a pornit");
             ClientOp ob = new ClientOp();
@@ -103,7 +134,17 @@ public class ClientRMI
                 if (request.equals("curent"))
                 {
                     int result = ob.curent();
-                    System.out.println("Current calue is " + result);
+                    System.out.println("Current value is " + result);
+                }
+                 else
+                if (request.equals("libere"))
+                {
+                    System.out.println("Locuri libere:");
+                    ArrayList<Integer> libere = new ArrayList<Integer>(ob.locuriLibere());
+                    for (int i = 0; i < libere.size(); i++) {
+                        System.out.println(libere.get(i));
+                    }
+
                 }
                
 //                break;
