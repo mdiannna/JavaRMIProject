@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 class ServerOp implements GeneralInterface {
     Places places;
     int val;
+    static int reservationIDs = 1;
 
     ServerOp(int i) {
         this.val = 0;
@@ -65,10 +66,13 @@ class ServerOp implements GeneralInterface {
 
     @Override
     public int reservation(ArrayList<Integer> placesToReserve) throws RemoteException {
-//        TODO
-//      -1 = failure, else, return reservationId
+        if(places.canReserve(placesToReserve)) {
+            reservationIDs++;
+            places.reserve(placesToReserve, reservationIDs);
+            return reservationIDs;
+        } else {
         return -1;
-    
+        }
     }
     
 }
@@ -126,15 +130,22 @@ public class ServerRMI
                 }
                 else if (method.equals("reservation")) {
                     System.out.println("Reservation");
-//                  Reservation clientReservation = new Reservation(........);
-//                    int reservationID = serverOb.reservation(clientReservation);
-//                    outputStream.write(reservationID);
+                    ArrayList<Integer> tryReserve = new ArrayList<Integer>(serverOb.locuriLibere());
+                    
+                    int size = inputStream.readInt();
+                    for(int i=0; i<size; i++) {
+                        int nr = inputStream.readInt();
+                        tryReserve.add(nr);
+                    }
+                                        
+                    int reservationID = serverOb.reservation(tryReserve);
+                    outputStream.write(reservationID);
                 }
                 else if (method.equals("terminate"))
                 {
                     break;
                 }
-            }while(true);        
+            } while(true);        
             
             inputStream.close();
             outputStream.close();

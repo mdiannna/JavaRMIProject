@@ -19,6 +19,10 @@ public class Reservation {
         reservationId = resId;
         reservedPlaces = new ArrayList<>(resPlaces);
     }
+
+    Reservation(ArrayList<Integer> placesToReserve) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public int getReservationId() {
         return reservationId;

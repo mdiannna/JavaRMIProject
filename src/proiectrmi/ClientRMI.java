@@ -101,7 +101,14 @@ class ClientOp implements GeneralInterface {
     public int reservation(ArrayList<Integer> placesToReserve) throws RemoteException {
         try{
             m_output.writeUTF("reservation");
+            m_output.writeInt(placesToReserve.size());
+            for(int i=0; i<placesToReserve.size(); i++) {
+                m_output.writeInt(placesToReserve.get(i));
+                System.out.println("Wrote " + placesToReserve.get(i) + " to server");
+            }
+
             int reservationID = m_input.read();
+            System.out.println("Reservation ID: " + reservationID);
             return reservationID;
         }
         catch(Exception e)
@@ -162,7 +169,7 @@ public class ClientRMI
                     if(request.equals("reservation")) {
                         System.out.println("Number of places?");
                         int nrPlaces = sc.nextInt();
-                        System.out.println("Places:");
+                        System.out.println(nrPlaces + " Places:");
                         
                         ArrayList<Integer> placesToReserve = new ArrayList<Integer>();
                         for(int i=0; i<nrPlaces; i++) {
@@ -173,6 +180,7 @@ public class ClientRMI
                         if(reservationId == -1) {
                             System.out.println("Reservation failed.");
                         } else {
+                            System.out.println("Reservation succeeded.");
                             Reservation reservation = new Reservation(reservationId, placesToReserve);
                             reservations.add(reservation);
                         }

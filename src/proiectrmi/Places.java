@@ -21,7 +21,7 @@ public class Places {
         list = new int[maxLength];
         Arrays.fill(list, 0);
     }
-    
+
     public Places(int nrPlaces) {
         list = new int[nrPlaces];
         Arrays.fill(list, 0);
@@ -44,10 +44,6 @@ public class Places {
         }
 
         public int first() {
-
-//            if (places.maxLength > 0) {
-//                return places.list[0];
-//            }
             currentPos = 0;
             return 0;
         }
@@ -60,11 +56,15 @@ public class Places {
         }
 
         public void nextFree() {
+            boolean incremented = false;
             while (currentPos < places.getMaxLength() - 1 && places.list[currentPos] != 0) {
+                currentPos++;
+                incremented = true;
+            }
+            if (!incremented) {
                 currentPos++;
             }
             currentReserv = places.list[currentPos];
-            currentPos++;
         }
 
         public int currentPlace() {
@@ -75,12 +75,11 @@ public class Places {
             return currentReserv;
         }
 
-        public boolean isDone()  throws Exception {
+        public boolean isDone() throws Exception {
             if (currentPos >= 0 && currentPos < places.getMaxLength()) {
                 return false;
             }
             return true;
-
         }
 
     }
@@ -96,6 +95,21 @@ public class Places {
 
     public int[] getPlacesList() {
         return list;
+    }
+
+    public boolean canReserve(ArrayList<Integer> tryPlaces) {
+        for (int j = 0; j < tryPlaces.size(); j++) {
+            if (list[tryPlaces.get(j)] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void reserve(ArrayList<Integer> tryPlaces, int reservationID) {
+        for (int j = 0; j < tryPlaces.size(); j++) {
+            add(tryPlaces.get(j), reservationID);
+        }
     }
 
     // 2. Add a createIterator() member to the collection class
@@ -116,19 +130,15 @@ public class Places {
 
 //        System.out.println(it1.first());
 //        System.out.println(it1.isDone());
-
         for (it1.first(); !it1.isDone(); it1.next()) {
             System.out.println(it1.currentPlace() + " :  " + it1.currentReservation());
         }
 
-        
 //        TODO: metoda getFreePlaces in ServerOp si ClientOp
         System.out.println("Free places:");
         for (it1.first(); !it1.isDone(); it1.nextFree()) {
             System.out.println(it1.currentPlace() + " :  " + it1.currentReservation());
         }
 
-        
-        System.out.println("sdfgsdfG");
     }
 }
