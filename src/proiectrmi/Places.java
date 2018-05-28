@@ -39,26 +39,27 @@ public class Places {
         }
 
         public int first() {
-            if (places.maxLength > 0) {
-                return places.list[0];
-            }
-            return -1;
+
+//            if (places.maxLength > 0) {
+//                return places.list[0];
+//            }
+            currentPos = 0;
+            return 0;
         }
 
-        public void next() {
-            try {
-                currentPos++;
+        public void next() throws Exception {
+            if (currentPos < places.getMaxLength()) {
                 currentReserv = places.list[currentPos];
-            } catch (Exception e) {
-                currentReserv = null;
+                currentPos++;
             }
         }
 
         public void nextFree() {
-            while (places.list[currentPos] != 0) {
+            while (currentPos < places.getMaxLength() - 1 && places.list[currentPos] != 0) {
                 currentPos++;
             }
             currentReserv = places.list[currentPos];
+            currentPos++;
         }
 
         public int currentPlace() {
@@ -69,14 +70,9 @@ public class Places {
             return currentReserv;
         }
 
-        public boolean isDone() {
-            try {
-                if (currentPos >= 0 && currentPos < places.getMaxLength()) {
-                    return false;
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                return true;
+        public boolean isDone()  throws Exception {
+            if (currentPos >= 0 && currentPos < places.getMaxLength()) {
+                return false;
             }
             return true;
 
@@ -118,6 +114,11 @@ public class Places {
 
 //                           System.out.println(it1.next());
         for (it1.first(); !it1.isDone(); it1.next()) {
+            System.out.println(it1.currentPlace() + " :  " + it1.currentReservation());
+        }
+
+        System.out.println("Free places:");
+        for (it1.first(); !it1.isDone(); it1.nextFree()) {
             System.out.println(it1.currentPlace() + " :  " + it1.currentReservation());
         }
 
