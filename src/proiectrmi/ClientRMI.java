@@ -96,14 +96,29 @@ class ClientOp implements GeneralInterface {
             System.out.println(e.getMessage());
         }
     }
+
+    @Override
+    public int reservation(ArrayList<Integer> placesToReserve) throws RemoteException {
+        try{
+            m_output.writeUTF("reservation");
+            int reservationID = m_input.read();
+            return reservationID;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+//        -1 = failure
+        return -1;
+    }
 }
 
 
 
 public class ClientRMI
 {
-    ArrayList<Reservation> reservations = new ArrayList<Reservation>();
-
+    static ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+    
     /**
      * @param args the command line arguments
      */
@@ -117,7 +132,6 @@ public class ClientRMI
 
             for (;;)
             {
-                //to do:
                 String request = sc.next();
                 if (request.equals("terminate"))
                 {
@@ -136,7 +150,7 @@ public class ClientRMI
                     int result = ob.curent();
                     System.out.println("Current value is " + result);
                 }
-                 else
+                else
                 if (request.equals("libere"))
                 {
                     System.out.println("Locuri libere:");
@@ -144,7 +158,25 @@ public class ClientRMI
                     for (int i = 0; i < libere.size(); i++) {
                         System.out.println(libere.get(i));
                     }
-
+                } else {
+                    if(request.equals("reservation")) {
+                        System.out.println("Number of places?");
+                        int nrPlaces = sc.nextInt();
+                        System.out.println("Places:");
+                        
+                        ArrayList<Integer> placesToReserve = new ArrayList<Integer>();
+                        for(int i=0; i<nrPlaces; i++) {
+                            int p = sc.nextInt();
+                            placesToReserve.add(p);
+                        }
+                        int reservationId = ob.reservation(placesToReserve);
+                        if(reservationId == -1) {
+                            System.out.println("Reservation failed.");
+                        } else {
+                            Reservation reservation = new Reservation(reservationId, placesToReserve);
+                            reservations.add(reservation);
+                        }
+                    }
                 }
                
 //                break;

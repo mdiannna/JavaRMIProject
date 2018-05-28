@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,6 +62,14 @@ class ServerOp implements GeneralInterface {
     public int getVal() {
         return val;
     }
+
+    @Override
+    public int reservation(ArrayList<Integer> placesToReserve) throws RemoteException {
+//        TODO
+//      -1 = failure, else, return reservationId
+        return -1;
+    
+    }
     
 }
 
@@ -69,6 +78,10 @@ class ServerOp implements GeneralInterface {
 public class ServerRMI
 {
     static final int PORT = 1100;
+//    Client id, reservation array list
+    HashMap<Integer, ArrayList<Reservation>> reservations = new HashMap<Integer, ArrayList<Reservation>>();
+    static int clientsIDs = 0;
+    
     /**
      * @param args the command line arguments
      */
@@ -79,10 +92,12 @@ public class ServerRMI
             
             ServerSocket serverSocket = new ServerSocket(PORT);
             Socket clientSocket = serverSocket.accept();
-
+            int clientID = clientsIDs++;
+            
             DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
             OutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
             ServerOp serverOb = new ServerOp(0);
+            
             
             do
             {
@@ -109,14 +124,12 @@ public class ServerRMI
                         outputStream.write(libere.get(i));
                     }
                 }
-//
-//                if (method.equals("add"))
-//                {
-//                    final int paramA = inputStream.readInt();
-//                    final int paramB = inputStream.readInt();
-//                    final int result = serverOb.add(paramA, paramB);
-//                    outputStream.write(result);
-//                }
+                else if (method.equals("reservation")) {
+                    System.out.println("Reservation");
+//                  Reservation clientReservation = new Reservation(........);
+//                    int reservationID = serverOb.reservation(clientReservation);
+//                    outputStream.write(reservationID);
+                }
                 else if (method.equals("terminate"))
                 {
                     break;
