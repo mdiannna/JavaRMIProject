@@ -19,6 +19,7 @@ interface GeneralInterface extends Remote {
     public void terminate() throws RemoteException;
     public ArrayList<Integer> locuriLibere() throws RemoteException;
     public int reservation(ArrayList<Integer> placesToReserve) throws RemoteException;
+    public ArrayList<Integer> getReservation(int id) throws RemoteException;
 }
 
 

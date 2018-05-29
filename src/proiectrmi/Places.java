@@ -57,14 +57,24 @@ public class Places {
 
         public void nextFree() {
             boolean incremented = false;
-            while (currentPos < places.getMaxLength() - 1 && places.list[currentPos] != 0) {
+//             if (currentPos < places.getMaxLength()) {
+////                currentReserv = places.list[currentPos];
+//                currentPos++;
+//            }
+                            currentPos++;
+
+while (currentPos < places.getMaxLength() && places.list[currentPos] != 0) {
                 currentPos++;
                 incremented = true;
             }
-            if (!incremented) {
-                currentPos++;
-            }
-            currentReserv = places.list[currentPos];
+
+//            if (!incremented && currentPos<places.getMaxLength()-1) {
+//                currentPos++;
+//            }
+//            currentReserv = places.list[currentPos];
+//            if ( currentPos<places.getMaxLength()) {
+//                currentPos++;
+//            }
         }
 
         public int currentPlace() {

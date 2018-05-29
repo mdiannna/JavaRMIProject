@@ -77,7 +77,7 @@ class ClientOp implements GeneralInterface {
             for (int i = 0; i < size; i++) {
                 int nr = m_input.read();
                 libere.add(nr);
-                System.out.println("Nr: " + nr);
+//                System.out.println("Nr: " + nr);
             }
         }catch(Exception e) {
             System.out.println(e.getMessage());
@@ -118,6 +118,34 @@ class ClientOp implements GeneralInterface {
 //        -1 = failure
         return -1;
     }
+
+    @Override
+    public ArrayList<Integer> getReservation(int id) throws RemoteException {
+        try {
+            ArrayList<Integer> result = new ArrayList<Integer>();
+            m_output.writeUTF("getReservation");
+            m_output.writeInt(id);
+
+            int size = m_input.read();
+            System.out.println("Size:" + size);
+            if(size == -1) {
+                System.out.println("Invalid reservation.");
+            } else {
+                System.out.println("Places reserved:");
+                for(int i=0;i<size;i++) {
+                    int number = m_input.read();
+                    result.add(number);
+                    System.out.println(number);
+                }
+            }
+            return result;
+        }  catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    
 }
 
 
@@ -185,6 +213,11 @@ public class ClientRMI
                             reservations.add(reservation);
                         }
                     }
+                }
+                if (request.equals("getReservation"))
+                {
+                    int i = sc.nextInt();
+                    ob.getReservation(i);
                 }
                
 //                break;
